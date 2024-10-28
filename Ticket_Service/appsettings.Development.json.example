@@ -1,0 +1,5 @@
+﻿{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Database=ticketdb;Username=your_username;Password=your_password;SearchPath=public;"
+  }
+}
