@@ -1,6 +1,8 @@
 ﻿# Rider
 .idea/
+**/.idea/
 *.sln.iml
+*.DotSettings.user
 
 # Build results
 [Bb]in/
@@ -16,6 +18,3 @@
 # .NET Core
 appsettings.Development.json
 appsettings.Local.json
-
-# Visual Studio directory
-.vs/
