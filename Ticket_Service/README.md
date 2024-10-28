@@ -25,7 +25,7 @@ Coming from a React/Node.js background, I built this project to understand .NET'
 
 1. Clone the repository
 2. Ensure you have .NET 8 SDK installed
-3. Update the connection string in `appsettings.json`
+3. Update the connection string in `appsettings.json` referencing `appsettings.Development.json.example`
 4. Run migrations:
 ```bash
 dotnet ef database update
