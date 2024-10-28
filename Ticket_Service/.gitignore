@@ -1,0 +1,21 @@
+﻿# Rider
+.idea/
+*.sln.iml
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+
+# .NET Core
+appsettings.Development.json
+appsettings.Local.json
+
+# Visual Studio directory
+.vs/
