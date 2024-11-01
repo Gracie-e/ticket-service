@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ticket_Service.DTOs;
-using Ticket_Service.Models.Tickets;
+using Ticket_Service.Features.Tickets.DTOs;
+using Ticket_Service.Features.Tickets.Models;
 using Ticket_Service.Services;
 
 namespace Ticket_Service.Controllers;

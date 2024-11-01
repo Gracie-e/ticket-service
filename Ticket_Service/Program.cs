@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Ticket_Service.Data;
+using Ticket_Service.Infrastructure.Data;
 using Ticket_Service.Services;
-using Ticket_Service.Socket;
+using Ticket_Service.Websocket;
 using Ticket_Service.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);

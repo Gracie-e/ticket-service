@@ -1,5 +1,5 @@
-﻿using Ticket_Service.DTOs;
-using Ticket_Service.Models.Tickets;
+﻿using Ticket_Service.Features.Tickets.DTOs;
+using Ticket_Service.Features.Tickets.Models;
 
 namespace Ticket_Service.Services
 {

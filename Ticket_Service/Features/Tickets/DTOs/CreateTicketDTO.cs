@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Ticket_Service.Models.Tickets;
+using Ticket_Service.Features.Tickets.Models;
 
-namespace Ticket_Service.DTOs;
-
+namespace Ticket_Service.Features.Tickets.DTOs;
 public class CreateTicketDto
 {
-    
     [Required(ErrorMessage = "Sender User ID is required")]
     public int SenderUserId { get; set; }
     

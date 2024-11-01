@@ -1,7 +1,7 @@
-﻿using Ticket_Service.DTOs;
+﻿using Ticket_Service.Features.Tickets.DTOs;
 using Ticket_Service.Services;
 
-namespace Ticket_Service.Socket;
+namespace Ticket_Service.Websocket;
 using Microsoft.AspNetCore.SignalR;
 
 public class TicketHub(ITicketService ticketService) : Hub

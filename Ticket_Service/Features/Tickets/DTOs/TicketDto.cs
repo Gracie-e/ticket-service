@@ -1,8 +1,8 @@
-﻿using Ticket_Service.Models.Tickets;
+﻿
+using Ticket_Service.Features.Tickets.Models;
+namespace Ticket_Service.Features.Tickets.DTOs;
 
-namespace Ticket_Service.DTOs;
-
-public class TicketDto(
+public abstract class TicketDto(
     int id,
     string title,
     TicketStatus status,

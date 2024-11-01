@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ticket_Service.Models.Tickets;
+using Ticket_Service.Features.Tickets.Models;
 
-namespace Ticket_Service.Data
+namespace Ticket_Service.Infrastructure.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
