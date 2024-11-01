@@ -6,6 +6,8 @@ namespace Ticket_Service.Services
     public interface ITicketService
     {
         public Task<TicketDto> CreateTicketAsync(CreateTicketDto createTicketDto);
+        
+        public Task<List<TicketDto>> GetAllTicketsAsync();
         public Task<TicketDto?> GetTicketByIdAsync(int id);
 
         public Task<IEnumerable<TicketDto>> GetSentTickets(int userId);

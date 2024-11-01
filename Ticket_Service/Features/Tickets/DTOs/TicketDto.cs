@@ -2,7 +2,7 @@
 using Ticket_Service.Features.Tickets.Models;
 namespace Ticket_Service.Features.Tickets.DTOs;
 
-public abstract class TicketDto(
+public class TicketDto(
     int id,
     string title,
     TicketStatus status,

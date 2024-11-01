@@ -10,30 +10,46 @@ namespace Ticket_Service.Controllers;
 public class TicketController(ITicketService ticketService) : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType(typeof(Ticket), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(TicketDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto dto)
+    public async Task<ActionResult<TicketDto>> CreateTicket(CreateTicketDto dto)
     {
-        var ticket = await ticketService.CreateTicketAsync(dto);
-        return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
+        try
+        {
+            var ticket = await ticketService.CreateTicketAsync(dto);
+            return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
-
-    // get ticket by id
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<TicketDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<TicketDto>>> GetAllTickets()
+    {
+        var tickets = await ticketService.GetAllTicketsAsync();
+        return Ok(tickets);
+    }
+    
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(TicketDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TicketDto>> GetTicket(int id)
     {
         var ticket = await ticketService.GetTicketByIdAsync(id);
 
         if (ticket == null)
         {
-            return NotFound();
+            return NotFound(new { message = $"Ticket with ID {id} not found" });
         }
 
-        return ticket;
+        return Ok(ticket);
     }
     
-    // get user sent tickets
     [HttpGet("sent/{userId:int}")]
+    [ProducesResponseType(typeof(IEnumerable<TicketDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetSentTickets(int userId)
     {
         var tickets = await ticketService.GetSentTickets(userId);
@@ -41,15 +57,10 @@ public class TicketController(ITicketService ticketService) : ControllerBase
     }
 
     [HttpGet("received/{userId:int}")]
+    [ProducesResponseType(typeof(IEnumerable<TicketDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetReceivedTickets(int userId)
     {
         var tickets = await ticketService.GetReceivedTickets(userId);
         return Ok(tickets);
     }
-    
-    
-
 }
-
-    
-    
