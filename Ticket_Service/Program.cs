@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Ticket_Service.Data;
 using Ticket_Service.Services;
 using Ticket_Service.Socket;
+using Ticket_Service.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +12,16 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// register middleware
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
 builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowViteApp", corsPolicyBuilder =>
     {
-        corsPolicyBuilder.WithOrigins("http://localhost:5173") // Vite app's URL
+        corsPolicyBuilder.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

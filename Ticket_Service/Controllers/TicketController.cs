@@ -10,6 +10,8 @@ namespace Ticket_Service.Controllers;
 public class TicketController(ITicketService ticketService) : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(typeof(Ticket), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto dto)
     {
         var ticket = await ticketService.CreateTicketAsync(dto);
