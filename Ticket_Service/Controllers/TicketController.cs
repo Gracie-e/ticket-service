@@ -6,7 +6,7 @@ using Ticket_Service.Services;
 namespace Ticket_Service.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/tickets")]
 public class TicketController(ITicketService ticketService) : ControllerBase
 {
     [HttpPost]
