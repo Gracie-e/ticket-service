@@ -21,7 +21,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowViteApp", corsPolicyBuilder =>
     {
-        corsPolicyBuilder.WithOrigins("http://localhost:5173")
+        corsPolicyBuilder.WithOrigins("http://localhost:5173", "http://localhost:5174")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

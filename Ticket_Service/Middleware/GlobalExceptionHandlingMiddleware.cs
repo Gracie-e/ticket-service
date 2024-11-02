@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Ticket_Service.Common.Api;
 
 namespace Ticket_Service.Middleware;
 
@@ -13,37 +14,30 @@ public class GlobalExceptionHandlingMiddleware(ILogger<GlobalExceptionHandlingMi
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "An unexpected error occured.");
+            logger.LogError(ex, "An unexpected error occurred.");
             
             var response = context.Response;
             response.ContentType = "application/json";
 
-            var errorResponse = new
+            var statusCode = ex switch
             {
-                Message = "An error occured while processing your request",
-                StatusCode = (int)HttpStatusCode.InternalServerError,
+                ArgumentNullException or InvalidOperationException or ArgumentException 
+                    => (int)HttpStatusCode.BadRequest,
+                KeyNotFoundException 
+                    => (int)HttpStatusCode.NotFound,
+                _ => (int)HttpStatusCode.InternalServerError
             };
 
-            switch (ex)
-            {
-                case ArgumentNullException:
-                case InvalidOperationException:
-                case ArgumentException:
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    errorResponse = new { ex.Message, StatusCode = (int)HttpStatusCode.BadRequest };
-                    break;
-                
-                case KeyNotFoundException:
-                    response.StatusCode = (int)HttpStatusCode.NotFound;
-                    errorResponse = new { ex.Message, StatusCode = (int)HttpStatusCode.NotFound };
-                    break;
-                
-                default:
-                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
-            }
+            response.StatusCode = statusCode;
+
+            var apiResponse = ApiResponse<object>.Failure(
+                message: statusCode == (int)HttpStatusCode.InternalServerError
+                    ? "An error occurred while processing your request"
+                    : ex.Message,
+                statusCode: statusCode
+            );
             
-            var result = JsonSerializer.Serialize(errorResponse);
+            var result = JsonSerializer.Serialize(apiResponse);
             await response.WriteAsync(result);
         }
     }
