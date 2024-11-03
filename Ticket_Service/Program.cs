@@ -49,6 +49,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<TicketHub>("/ticket-hub");
+app.MapHub<TicketHub>("/hubs/tickets");
 
 app.Run();

@@ -16,6 +16,9 @@ namespace Ticket_Service.Features.Tickets.Models
         [StringLength(100)]
         public required string Title { get; init; } =string.Empty;
         
+        [Required]
+        [StringLength(300)]
+        public string Description { get; init; } = string.Empty;
         
         [Required]
         public DateTime CreatedAt { get; init; }

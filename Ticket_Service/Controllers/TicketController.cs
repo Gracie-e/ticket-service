@@ -18,6 +18,7 @@ public class TicketController(ITicketService ticketService, ILogger<TicketContro
         {
             var ticket = await ticketService.CreateTicketAsync(dto);
             var response = ApiResponse<TicketDto>.Success(ticket);
+            logger.LogInformation("Ticket created: {Ticket}", ticket);
             return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, response);
         }
         catch (ArgumentException ex)

@@ -15,6 +15,10 @@ public class CreateTicketDto
     [StringLength(100, ErrorMessage = "Title cannot be longer than 100 characters.")]
     public required string Title { get; set; }
     
+    [Required(ErrorMessage = "Description is required")]
+    [StringLength(300, ErrorMessage = "Description cannot be longer than 300 characters.")]
+    public required string Description { get; set; }
+    
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public TicketStatus Status { get; set; } = TicketStatus.Open;
 }

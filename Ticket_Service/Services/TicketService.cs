@@ -31,7 +31,8 @@ namespace Ticket_Service.Services
                     ReceiverUserIds = createTicketDto.ReceiverUserIds,
                     Title = createTicketDto.Title.Trim(),
                     Status = createTicketDto.Status,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    Description = createTicketDto.Description.Trim(),
                 };
 
                 context.Tickets.Add(ticket);
@@ -122,6 +123,7 @@ namespace Ticket_Service.Services
             return new TicketDto(
                 ticket.Id,
                 ticket.Title,
+                ticket.Description,
                 ticket.Status,
                 ticket.SenderUserId,
                 ticket.ReceiverUserIds,

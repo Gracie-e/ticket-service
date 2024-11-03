@@ -22,7 +22,7 @@ namespace Ticket_Service.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Ticket_Service.Models.Tickets.Ticket", b =>
+            modelBuilder.Entity("Ticket_Service.Features.Tickets.Models.Ticket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,6 +32,11 @@ namespace Ticket_Service.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<int[]>("ReceiverUserIds")
                         .IsRequired()

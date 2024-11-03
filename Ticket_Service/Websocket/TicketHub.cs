@@ -1,31 +1,55 @@
-﻿using Ticket_Service.Features.Tickets.DTOs;
+﻿using Microsoft.AspNetCore.SignalR;
+using Ticket_Service.Features.Tickets.Models;
 using Ticket_Service.Services;
+using System.Collections.Concurrent;
 
 namespace Ticket_Service.Websocket;
-using Microsoft.AspNetCore.SignalR;
 
 public class TicketHub(ITicketService ticketService) : Hub
 {
-    public async Task SendTicket(CreateTicketDto createTicketDto)
+    private static readonly ConcurrentDictionary<string, int> UserConnections = new();
+
+    // Register user connection with their userId
+    public async Task RegisterUser(int userId)
     {
-        try
+        UserConnections.TryAdd(Context.ConnectionId, userId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{userId}");
+    }
+
+    // Send ticket to specific receivers
+    public async Task SendTicket(Ticket ticket)
+    {
+        // Send to all receivers
+        foreach (var receiverId in ticket.ReceiverUserIds)
         {
-            var createdTicket = await ticketService.CreateTicketAsync(createTicketDto);
-            var receiverIds = createTicketDto.ReceiverUserIds.Select(id => id.ToString()).ToList();
-            await Clients.Users(receiverIds).SendAsync("ReceiveTicket", createdTicket);
-            await Clients.User(createTicketDto.SenderUserId.ToString()).SendAsync("TicketSent", createdTicket.Id);
+            await Clients.Group($"user_{receiverId}").SendAsync("ReceiveTicket", ticket);
         }
-        catch (Exception ex)
+
+        // Also send to sender
+        await Clients.Group($"user_{ticket.SenderUserId}").SendAsync("TicketSent", ticket);
+    }
+
+    // Notify about ticket status changes
+    public async Task UpdateTicketStatus(int ticketId, TicketStatus newStatus)
+    {
+        var ticket = await ticketService.GetTicketByIdAsync(ticketId);
+        if (ticket != null)
         {
-            Console.WriteLine(ex.Message);
-            await Clients.Caller.SendAsync("TicketCreationFailed", ex.Message);
+            // Notify all involved parties about the status change
+            var involvedUsers = new List<int> { ticket.SenderUserId };
+            involvedUsers.AddRange(ticket.ReceiverUserIds);
+
+            foreach (var userId in involvedUsers)
+            {
+                await Clients.Group($"user_{userId}").SendAsync("TicketStatusUpdated", ticketId, newStatus);
+            }
         }
     }
 
-    public async Task ReceiveUserTickets(int userId)
+    // Handle disconnection
+    public override Task OnDisconnectedAsync(Exception? exception)
     {
-        var userTickets = await ticketService.GetReceivedTickets(userId);
-        await Clients.Caller.SendAsync("UserTicketsReceived", userTickets);
+        UserConnections.TryRemove(Context.ConnectionId, out _);
+        return base.OnDisconnectedAsync(exception);
     }
 }
-
